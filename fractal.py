@@ -38,7 +38,7 @@ def draw(line):
 	global canvas
 	canvas.delete(ALL)
 	
-	canvas.create_text(200, 80, text="Click the screen, you damn faggot")
+	canvas.create_text(200, 80, text="Click the screen")
 	
 	previous = None
 	for point in line:	
