@@ -1,87 +1,70 @@
+from side import Side
+from line_functions import *
 from Tkinter import *
 import math
-from enum import Enum
+import time
 
-class Side(Enum):
-	left = 1
-	right = 2
 
 master = Tk()
 canvas = Canvas(master, width=1500, height=900)
-canvas.pack()
-current_fractal = [(450, 600), (1050, 600)]
+canvas.pack(fill=BOTH, expand=YES)
+current_fractal = [(750, 700), (1450, 700)]
 canvas.configure(background='white')
-#cool_list = [ triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right)]
-#alien_spiral = [triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left)]
-#fractal_mask = [trapazoid_iteration(Side.left), trapazoid_iteration(Side.right), trapazoid_iteration(Side.left)]
-#dragon_curve = [triangle_iteration(Side.left), triangle_iteration(Side.right)]
-#organic_tips = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right)]
-#pine_cones = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.left)]
-#two_faced_spiral = [triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left),  triangle_iteration(Side.right)]
-#alien_network = [triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right), triangle_iteration(Side.left)]
-#rose_spiral = [triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right), triangle_iteration(Side.right)]
-#parallel_spiral = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right)]
-#complex_dragon = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right)]
+cool_list = [ triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right)]
+alien_spiral = [triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left)]
+fractal_mask = [trapazoid_iteration(Side.left), trapazoid_iteration(Side.right), trapazoid_iteration(Side.left)]
+dragon_curve = [triangle_iteration(Side.left), triangle_iteration(Side.right)]
+organic_tips = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right)]
+pine_cones = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.left)]
+two_faced_spiral = [triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left),  triangle_iteration(Side.right)]
+alien_network = [triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right), triangle_iteration(Side.left)]
+rose_spiral = [triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right), triangle_iteration(Side.right)]
+parallel_spiral = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right)]
+complex_dragon = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right)]
+von_koch_snowflake =[middle_triangle(Side.left)]
 
-def trapazoid_iteration(side):
-	first_angle = math.pi / 3
-	second_angle = -2 * math.pi / 3
-	if side is Side.left:
-		first_angle = -first_angle
-		second_angle = -second_angle
-	def fcn(line_segment):
-		properties = vector_properties(line_segment)	
-		first_point_angle = properties[0] + first_angle
-		first_point_length = properties[1] / 2
-		first_new_point = offset_point(line_segment[0], first_point_angle, first_point_length)
-		
-		second_point_angle = properties[0]
-		second_point_length = properties[1] / 2
-		second_new_point = offset_point(first_new_point, second_point_angle, second_point_length)
-		return [first_new_point, second_new_point]
-	return fcn
 
-def triangle_iteration(side):
-	angle = math.pi / 4
-	if side is Side.left:
-		angle = -angle
-	def fcn(line_segment):
-		properties = vector_properties(line_segment)
+function_list = pine_cones 
 
-		new_angle = properties[0] + angle		
-		new_length = properties[1] / math.sqrt(2)
+def next_button():
+	global current_fractal 
 
-		new_point = offset_point(line_segment[0], new_angle, new_length)
-		return [new_point]
-	return fcn
+	time_wrapper(iterate_fractal , "Fractal iteration")
+	time_wrapper(draw_fractal, "Drawing iteration")
 
-def next_button(event):
-	create_drawing()
-
-canvas.bind("<ButtonPress-1>", next_button)
+#canvas.bind("<ButtonPress-1>", next_button)
 
 def draw(line):
 	global canvas
 	canvas.delete(ALL)
+	button1 = Button(master, text="test", command=next_button, anchor='w', width =10)
+	window = canvas.create_window(10, 10, anchor='nw', window=button1)
 	
 	#canvas.create_text(200, 80, text="Click the screen")
 	
 	previous = None
 	for point in line:	
 		if previous is not None:
-			canvas.create_line(previous[0], previous[1], point[0], point[1], width=2)
+			canvas.create_line(previous[0], previous[1], point[0], point[1], width=1)
 		previous = point
-	mainloop()
 
-def create_drawing():
-	global current_fractal 
-	function_list = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right)]
+def time_wrapper(function, text):
+	start = time.time()
+	function()	
+	print text + " elapsed in " + str(time.time() - start)
+
+def iterate_fractal():
+	global current_fractal
+	global function_list
 	current_fractal = line_fractal(current_fractal, function_list, 1)
+
+def draw_fractal():
 	draw(current_fractal)
 
 def main():
 	global current_fractal
 	draw(current_fractal)
+	mainloop()
 
 def line_fractal(seed, function_list, num_iterations=1):
 	for i in range(num_iterations):
@@ -111,20 +94,6 @@ def line_fractal_iteration(seed, function_list):
 
 	to_return.append(seed[-1])
 	return to_return
-
-def offset_point(base, angle, length):
-	x = base[0] + length * math.cos(angle)			
-	y = base[1] + length * math.sin(angle)			
-	return (x, y)
-
-
-def vector_properties(vector):
-	(base, arrow_head) = vector
-	x_diff = arrow_head[0] - base[0]
-	y_diff = arrow_head[1] - base[1]	
-	angle = math.atan2(y_diff, x_diff)
-	length = math.hypot(x_diff, y_diff)
-	return (angle, length)
 
 if __name__ == "__main__":
 	main()
