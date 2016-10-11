@@ -8,7 +8,7 @@ import time
 master = Tk()
 canvas = Canvas(master, width=1500, height=900)
 canvas.pack(fill=BOTH, expand=YES)
-current_fractal = [(750, 700), (1450, 700)]
+current_fractal = [(750, 700), (1450, 700), (1600, 900)]
 canvas.configure(background='white')
 cool_list = [ triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right)]
 alien_spiral = [triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left)]
@@ -21,16 +21,14 @@ alien_network = [triangle_iteration(Side.left), triangle_iteration(Side.right), 
 rose_spiral = [triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right), triangle_iteration(Side.right)]
 parallel_spiral = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right)]
 complex_dragon = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.right)]
-von_koch_snowflake =[middle_triangle(Side.left)]
+von_koch_snowflake = [middle_triangle(Side.left)]
+stacked_bears = [ middle_triangle(Side.left), middle_triangle(Side.right), middle_triangle(Side.right), middle_triangle(Side.left) ]
 
-
-function_list = pine_cones 
+function_list = [ middle_triangle(Side.left)]
 
 def next_button():
-	global current_fractal 
-
-	time_wrapper(iterate_fractal , "Fractal iteration")
-	time_wrapper(draw_fractal, "Drawing iteration")
+	iterate_fractal()
+	draw_fractal()
 
 #canvas.bind("<ButtonPress-1>", next_button)
 
