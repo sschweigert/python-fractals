@@ -34,6 +34,25 @@ def triangle_iteration(side):
 		return [new_point]
 	return fcn
 
+def new_triangle_iteration(side):
+	perpendicular_offset = 0.5
+	parallel_offset = 0.5
+	if side is Side.left:
+		perpendicular_offset = perpendicular_offset * -1
+	def fcn(line_segment):
+		x_diff = line_segment[1][0] - line_segment[0][0]
+		y_diff = line_segment[1][1] - line_segment[0][1]
+
+		x_offset = parallel_offset * x_diff - perpendicular_offset * y_diff
+		y_offset = parallel_offset * y_diff + perpendicular_offset * x_diff
+
+		x = line_segment[0][0] + x_offset
+		y = line_segment[0][1] + y_offset
+
+		new_point = (x, y)
+		return [new_point]
+	return fcn
+
 def middle_triangle(side):
 	angle = math.pi / 3
 	if side is Side.left:

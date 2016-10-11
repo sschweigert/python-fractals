@@ -8,12 +8,13 @@ import time
 master = Tk()
 canvas = Canvas(master, width=1500, height=900)
 canvas.pack(fill=BOTH, expand=YES)
-current_fractal = [(750, 700), (1450, 700), (1600, 900)]
+current_fractal = [(750, 700), (1450, 700)]
 canvas.configure(background='white')
 cool_list = [ triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right)]
 alien_spiral = [triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left)]
 fractal_mask = [trapazoid_iteration(Side.left), trapazoid_iteration(Side.right), trapazoid_iteration(Side.left)]
 dragon_curve = [triangle_iteration(Side.left), triangle_iteration(Side.right)]
+new_dragon_curve = [new_triangle_iteration(Side.left), new_triangle_iteration(Side.right)]
 organic_tips = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right)]
 pine_cones = [triangle_iteration(Side.left), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.left)]
 two_faced_spiral = [triangle_iteration(Side.right), triangle_iteration(Side.left), triangle_iteration(Side.right), triangle_iteration(Side.left),  triangle_iteration(Side.right)]
@@ -24,7 +25,7 @@ complex_dragon = [triangle_iteration(Side.left), triangle_iteration(Side.left), 
 von_koch_snowflake = [middle_triangle(Side.left)]
 stacked_bears = [ middle_triangle(Side.left), middle_triangle(Side.right), middle_triangle(Side.right), middle_triangle(Side.left) ]
 
-function_list = [ middle_triangle(Side.left)]
+function_list = new_dragon_curve
 
 def next_button():
 	iterate_fractal()
